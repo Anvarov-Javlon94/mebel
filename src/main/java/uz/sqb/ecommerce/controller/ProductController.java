@@ -22,7 +22,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 @Slf4j
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-@RequestMapping
+@RequestMapping("/")
 public class ProductController {
 
     CategoryRepository categoryRepository;
