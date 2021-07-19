@@ -41,6 +41,8 @@ public class Product {
 
     Integer view_count;
 
+    Boolean product_availability;
+
     //in percent %
     Double discount;
     Double after_discount;

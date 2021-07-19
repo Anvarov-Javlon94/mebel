@@ -80,6 +80,6 @@
 <div>
 
 </div>
-<input type="submit" form="myForm" value="отправить">
+<input type="submit" form="myForm" value="отправить ">
 </body>
 </html>

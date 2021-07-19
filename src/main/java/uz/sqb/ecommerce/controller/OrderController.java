@@ -4,12 +4,15 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.criterion.Order;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import uz.sqb.ecommerce.entity.OrderDetails;
 import uz.sqb.ecommerce.entity.Orders;
+import uz.sqb.ecommerce.model.OrderDetailsModel;
+import uz.sqb.ecommerce.repository.OrderDetailsModelRepository;
 import uz.sqb.ecommerce.service.OrderDetailsService;
 import uz.sqb.ecommerce.service.OrderService;
 
@@ -26,6 +29,7 @@ public class OrderController {
 
     OrderService orderService;
     OrderDetailsService orderDetailsService;
+    OrderDetailsModelRepository orderDetailsModelRepository;
 
     public static final String ADD_TO_CART = "/addToCart";
     public static final String UPDATE_ORDER = "/updateOrder";

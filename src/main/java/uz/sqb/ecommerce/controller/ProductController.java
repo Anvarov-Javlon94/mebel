@@ -9,20 +9,22 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import uz.sqb.ecommerce.entity.OrderDetails;
 import uz.sqb.ecommerce.entity.Product;
 import uz.sqb.ecommerce.repository.CategoryRepository;
 import uz.sqb.ecommerce.service.CategoryService;
 import uz.sqb.ecommerce.service.OrderDetailsService;
 import uz.sqb.ecommerce.service.ProductService;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.io.IOException;
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
 @Slf4j
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-@RequestMapping("/")
 public class ProductController {
 
     CategoryRepository categoryRepository;
@@ -58,8 +60,10 @@ public class ProductController {
     }
 
     @GetMapping(GET_PRODUCT_LIST)
-    public String getProductList(Model model){
+    public String getProductList(Model model, HttpSession session){
+        int cartSize = orderDetailsService.getCartSize(session);
         model.addAttribute("products", productService.findAll());
+        model.addAttribute("cart_size", cartSize);
         return "products";
     }
 
@@ -71,8 +75,9 @@ public class ProductController {
 
     @GetMapping(PUT_PRODUCT)
     public String editPage(@RequestParam Long id, Model model){
+        Product product = productService.getProductById(id);
         model.addAttribute("categories", categoryService.getCategoryList());
-        model.addAttribute("product", productService.getProductById(id));
+        model.addAttribute("product", product);
         return "product-put-page";
     }
 

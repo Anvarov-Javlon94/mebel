@@ -8,9 +8,13 @@ import org.springframework.stereotype.Service;
 import uz.sqb.ecommerce.entity.OrderDetails;
 import uz.sqb.ecommerce.entity.Orders;
 import uz.sqb.ecommerce.entity.Product;
+import uz.sqb.ecommerce.model.OrderDetailsModel;
+import uz.sqb.ecommerce.model.OrderModel;
+import uz.sqb.ecommerce.repository.OrderDetailsModelRepository;
 import uz.sqb.ecommerce.repository.OrderDetailsRepository;
 
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
@@ -25,6 +29,8 @@ public class OrderDetailsService {
     OrderDetailsRepository orderDetailsRepository;
     OrderService orderService;
     ProductService productService;
+    OrderDetailsModelRepository orderDetailsModelRepository;
+    OrderDetailsModelService orderDetailsModelService;
 
     public Double getTotalPrice(List<OrderDetails> ordersAndProducts) {
         Double totalPrice = 0.0;
@@ -77,7 +83,8 @@ public class OrderDetailsService {
         return orderDetails;
     }
 
-    public void saveByProductId(OrderDetails productId, Date date, Orders order, Product product){
+    public OrderDetails saveByProductId(Date date, Orders order, Product product){
+        OrderDetails productId = new OrderDetails();
         int quantity = productId.getQuantity();
         order.setDate(date);
         productId.setOrder(order);
@@ -87,7 +94,7 @@ public class OrderDetailsService {
         } else {
             productId.setTotal_price(productId.getQuantity() * product.getPrice());
         }
-        orderDetailsRepository.save(productId);
+         return orderDetailsRepository.save(productId);
     }
 
     public void createOrderForProduct(HttpSession session, Long id){
@@ -99,16 +106,27 @@ public class OrderDetailsService {
             Product product = productService.getProductById(id);
             OrderDetails od = createNewOrderDetails(orderNew, product);
             saveOrderDetails(od);
+            OrderDetailsModel odm = new OrderDetailsModel(od);
+            orderDetailsModelRepository.save(odm);
+
         }
         else {
-            OrderDetails productId = getOrderDetailsByProductId(id);
+            List<OrderDetails> list = orderDetailsRepository.getOrderDetailsByOrderSessionId(session.getId());
+            int x = 0;
+            for (OrderDetails orderDetails : list){
+                if (orderDetails.getProduct().getId().equals(id)){
+                    x += 1;
+                }
+            }
             Product product = productService.getProductById(id);
-            if (productId == null){
+            if (x == 0){
                 OrderDetails orderDetails = createOrderDetailsWithProduct(date, order, product);
                 saveOrderDetails(orderDetails);
+                OrderDetailsModel model = orderDetailsModelService.entityToModel(orderDetails);
+                orderDetailsModelRepository.save(model);
             }
             else {
-                saveByProductId(productId, date, order, product);
+                saveByProductId(date, order, product);
             }
         }
     }
@@ -143,4 +161,19 @@ public class OrderDetailsService {
     public void deleteProductFromCart(Long id){
         orderDetailsRepository.deleteByProductId(id);
     }
+
+    public int getCartSize(HttpSession session) {
+        List<OrderDetails> orderDetails = getOrderDetailsByOrderSessionId(session.getId());
+        int cart_size = 0;
+        for (OrderDetails orderDetail : orderDetails) {
+            cart_size += orderDetail.getQuantity();
+        }
+        return cart_size;
+    }
+
+    public OrderDetails getById(Long id) {
+        return orderDetailsRepository.getById(id);
+    }
+
+
 }

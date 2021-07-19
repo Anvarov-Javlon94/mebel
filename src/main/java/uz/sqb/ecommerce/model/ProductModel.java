@@ -1,8 +1,10 @@
 package uz.sqb.ecommerce.model;
 
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import uz.sqb.ecommerce.entity.Category;
 import uz.sqb.ecommerce.entity.Product;
 
@@ -10,6 +12,7 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class ProductModel {
     Long id;
     String photo;

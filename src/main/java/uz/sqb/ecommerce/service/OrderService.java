@@ -5,7 +5,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import uz.sqb.ecommerce.entity.OrderDetails;
 import uz.sqb.ecommerce.entity.Orders;
+import uz.sqb.ecommerce.model.OrderDetailsModel;
 import uz.sqb.ecommerce.repository.OrderRepository;
 
 import java.util.List;
@@ -17,6 +19,7 @@ import java.util.List;
 public class OrderService {
 
     OrderRepository orderRepository;
+
 
     public Orders getOrderBySessionId(String sessionId){
         return orderRepository.getBySessionId(sessionId);
@@ -36,6 +39,8 @@ public class OrderService {
         orderRepository.save(order);
     }
 
+
+
     public List<Orders> findAll(){
         return orderRepository.findAll();
     }
@@ -43,5 +48,6 @@ public class OrderService {
     public  Orders getById(Long id){
         return orderRepository.getById(id);
     }
+
 
 }

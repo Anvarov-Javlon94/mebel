@@ -25,6 +25,7 @@ public class ProductService {
     ProductRepository productRepository;
 
     private  String path = "C:\\Users\\Javlon-Bezop\\Desktop\\ecommerce\\src\\main\\resources\\static\\images\\";
+//    private String path = "src/main/resources/static/images/";
 
     public void addProductByParam(Product product, MultipartFile file, Long category_id) throws IOException {
         Date dateTime = new Date();

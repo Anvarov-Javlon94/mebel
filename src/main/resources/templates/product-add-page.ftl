@@ -17,7 +17,11 @@
 </div>
 <form action="/addProduct" method="post" enctype="multipart/form-data">
     <input type="text" name="name" placeholder="product name" required>
-    <input type="text" name="product_availability" placeholder="product availability">
+<#--    <input type="text" name="product_availability" placeholder="product availability">-->
+    <select name="product_availability" id="">
+        <option value="true">true</option>
+        <option value="false">false</option>
+    </select>
     <textarea name="product_character" id="product_character" cols="30" rows="10" required placeholder="Введите характеристику"></textarea>
     <textarea name="product_description" id="product_description" cols="30" rows="10" required placeholder="Введите коментарии"></textarea>
     <input type="number" min="1" max="100000000" name="price" placeholder="price" required>
